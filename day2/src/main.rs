@@ -4,7 +4,7 @@ static MAX_RED: i32 = 12;
 static MAX_GREEN: i32 = 13;
 static MAX_BLUE: i32 = 14;
 
-fn main() {
+fn first_part() {
     let games: Vec<String> = fs::read_to_string("src/input.txt")
         .expect("Could not find file input.txt")
         .lines()
@@ -14,8 +14,13 @@ fn main() {
     let valid_count: i32 = games
         .iter()
         .map(|game| {
-            let parsed_game:Vec<&str> = game.split(": ").collect();
-            let game_no = parsed_game.first().unwrap().replace("Game ", "").parse::<i32>().expect("Invalid game number");
+            let parsed_game: Vec<&str> = game.split(": ").collect();
+            let game_no = parsed_game
+                .first()
+                .unwrap()
+                .replace("Game ", "")
+                .parse::<i32>()
+                .expect("Invalid game number");
 
             let moves = parsed_game
                 .last()
@@ -48,4 +53,8 @@ fn main() {
         })
         .sum();
     print!("Result {}", valid_count);
+}
+
+fn main() {
+    first_part();
 }
