@@ -5,11 +5,7 @@ static MAX_GREEN: i32 = 13;
 static MAX_BLUE: i32 = 14;
 
 fn part_one() {
-    let games: Vec<String> = fs::read_to_string("src/input.txt")
-        .expect("Could not find file input.txt")
-        .lines()
-        .map(|raw| String::from(raw))
-        .collect();
+    let games = read_games();
 
     let valid_count: i32 = games
         .iter()
@@ -33,7 +29,7 @@ fn part_one() {
                     let dat: Vec<&str> = val.split(" ").collect();
                     let num = dat
                         .first()
-                        .expect("Invalid number")
+                        .expect("No values found in vec dat")
                         .parse::<i32>()
                         .expect("Invalid number");
                     let color = dat.last().unwrap().to_owned();
@@ -54,34 +50,37 @@ fn part_one() {
         .sum();
     println!("Part one result {}", valid_count);
 }
-fn part_two() {
-    let games: Vec<String> = fs::read_to_string("src/input.txt")
+
+fn read_games() -> Vec<String> {
+    fs::read_to_string("src/input.txt")
         .expect("Could not find file input.txt")
         .lines()
         .map(|raw| String::from(raw))
-        .collect();
+        .collect()
+}
 
+fn part_two() {
+    let games = read_games();
     let valid_count: i32 = games
         .iter()
         .map(|game| {
-            let parsed_game: Vec<&str> = game.split(": ").collect();
+            let parsed_game = game.split(": ");
 
             let moves = parsed_game
                 .last()
                 .expect(format!("Unable to find a set of moves for game {:?}", game).as_str());
-            let sets: Vec<&str> = moves.split("; ").collect();
 
             let mut max_red = 0;
             let mut max_green = 0;
             let mut max_blue = 0;
 
-            for set in sets {
+            for set in moves.split("; ") {
                 set.split(", ").for_each(|raw| {
                     let val = raw.to_string();
                     let dat = val.split(" ").collect::<Vec<&str>>();
                     let num = dat
                         .first()
-                        .expect("Invalid number")
+                        .expect("No values found in vec dat")
                         .parse::<i32>()
                         .expect("Invalid number");
                     let color = dat.last().unwrap().to_owned();
